@@ -1,4 +1,10 @@
-﻿namespace OOPsReview
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace OOPsReview
 {
     //default for all classes is private
     //if an outside user of the class is to have access to the class then you need to make that class public
@@ -18,7 +24,7 @@
         //public double Height { get; set; } one could put data validation inside a property
         //Validation must be greater than 0.0 and less than or equal to 8.0
         //validation requires a fully implemented property
-        private double _Height
+        private double _Height;
         public double Height
         {
             get
@@ -71,5 +77,8 @@
         //handling nullable numberic
         //only two possibilities: a) a numeric or b)null
         public double? price { get; set; }
+
+        //Constructors
+
     }
 }
