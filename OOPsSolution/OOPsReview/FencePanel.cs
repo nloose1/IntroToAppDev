@@ -93,5 +93,36 @@ namespace OOPsReview
             Width = 8.0;
             Price = null;
         }
+
+        //greedy constuctor
+        // the constructor will have a list of parameters that will receive an argument value at the time the instance is created
+        // the values will be used to set the internal data of the instance before the istance is actually returned to the outside user
+        public FencePanel (double height, double width, string style, double price)
+        {
+            Height = height;
+            Width = width;
+            Style = style;
+            Price = price;
+        }
+
+        //behaviors(a.k.a. methods)
+        //a class behavior has the same syntax (grammar) as a standard programming method
+        // the class behavior is usually involved with the data of the class
+
+        //within these examples i am NOT doing full validation
+
+        public double EstimatedNumberOfPanels(double linearlength)
+        {
+            //probably validate that width has been set
+            //you could use data memebers directly within you code
+            //I use the properties beacuse they ensure proper values
+            double numberofpanels = linearlength / Width;
+            return numberofpanels;
+        }
+
+        public double TotalArea (double linearlength)
+        {
+            return Height * linearlength;
+        }
     }
 }
