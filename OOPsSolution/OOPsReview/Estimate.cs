@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OOPsReview
 {
@@ -19,7 +16,7 @@ namespace OOPsReview
         {
             //assumption you would put appropriate validation at required points in you logic to ensure data is present before using 
             double numberofpanels = Panel.EstimatedNumberOfPanels(LinearLength);
-            if((int)(numberofpanels * 10.0) > ((int)numberofpanels * 10))
+            if ((int)(numberofpanels * 10.0) > ((int)numberofpanels * 10))
             {
                 numberofpanels = (int)numberofpanels + 1;
             }
@@ -30,7 +27,7 @@ namespace OOPsReview
             else
             {
                 TotalPrice += numberofpanels * (double)Panel.Price;
-                foreach(var item in Gates)
+                foreach (var item in Gates)
                 {
                     TotalPrice += item.GatePrice;
                 }

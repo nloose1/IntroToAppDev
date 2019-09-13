@@ -53,7 +53,7 @@ namespace OOPsReview
 
         public double GatePrice { get; set; }
 
-        public FencePanel()
+        public FenceGate()
         {
             //optionally you could assign your own hard coded initial value 
             GateHeight = 6.0;
@@ -71,7 +71,7 @@ namespace OOPsReview
 
         public double GateArea()
         {
-            return GateHeight * GateHeight;
+            return GateHeight * GateWidth;
         }
 
     }
