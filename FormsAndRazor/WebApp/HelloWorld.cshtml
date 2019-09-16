@@ -1,0 +1,11 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = string.Format("Razor - {0}", "First Page");
+}
+
+<!-- default body area-->
+<blockquote>this is simple text for an html page</blockquote>
+<!--Indicate that the following code/html will go into the soecified section-->
+@section banner{
+    <h1><u>Hello World</u></h1>
+}
