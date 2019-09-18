@@ -1,0 +1,64 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = string.Format("Razor - {0}", "Basic Controls");
+
+    //retreive the entered users values from the web controls
+    //you will access he data from the request.Form["control paramater name"]
+    //this data will be returned as a STRING
+    //a data type of var is resolved at execution time.
+    //the name after var is the C# variable name
+    var enteredname = Request.Form["dataentry"];
+    var thebutton = Request.Form["theButton"];
+}
+
+@section banner{
+    <h1>Basic Controls</h1>
+}
+
+@if (IsPost)
+{
+    //if your form consists of multiple buttons the first level of you logic SHOULD be to determin which button was pressed
+    if (thebutton.Equals("bob"))
+    {
+        //any proccessing within the true path will happen only after the user has sent back the previous page
+        if (string.IsNullOrEmpty(enteredname))
+        {
+            <div class="offset-4">
+                <p style="color:firebrick; font-size: larger">
+                    You are required to enter your name.
+                </p>
+            </div>
+        }
+        else
+        {
+            <div class="offset-4">
+                <p>Well: hello there @enteredname</p>
+            </div>
+        }
+    }
+    else
+    {
+        enteredname = "";
+        <div class="offset-3">
+        <p> User cleared control</p>
+        </div>
+    }
+}
+else
+{
+    //any processing within the else would be page initilization processing
+    <div class="offset-4">
+        <p> this text shows up only on the first time the page appears </p>
+    </div>
+}
+
+<form id="theform" method="post">
+    <div class="offset-3">
+        <label id="lable1" for="dataentry">Enter your name:</label>&nbsp;&nbsp;
+        <input type="text" id="dataentry" name="dataentry" value="@enteredname" />
+        <br /><br />
+        <button id="PressMe" type="submit" value="bob" name="theButton">Press Me</button>
+        &nbsp;&nbsp;
+        <input type="submit" id="ClearMe" value="Clear Me" name="theButton" />
+    </div>
+</form>
