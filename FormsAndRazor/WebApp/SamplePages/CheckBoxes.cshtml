@@ -1,0 +1,75 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = string.Format("Razor - {0}", "Check Boxes");
+    //Any variable that needs to be global to the entire file needs to be declared in a global sence
+    //The variable choices is required in the post logic AND the form therefor choices needs to be devlared globally
+    string choices = "";
+}
+
+@section banner{
+    <h1>CheckBoxes on Form</h1>
+}
+@if (IsPost)
+{
+    //this example demonstrated that you can delay retreiving your form values until you actually have a post back
+    choices = Request.Form["GameGroup"];
+    var thebutton = Request.Form["theButton"];
+    if (thebutton.Equals("Reset"))
+    {
+        choices = "";
+    }
+    else
+    {
+        //validation choices will have a set of strings, one per checked checkbox separated by a delimiter(delimiter is a comma) if no checkboxes have been selected choices will be 
+        if (choices.IsEmpty())
+        {
+            <p class="offset-1"><span style="color:firebrick">You do not not like playing games?"</span></p>
+        }
+        else
+        {
+            // to break up the set of strings (checkbox choices) use the method .Split(delimiter)
+            //use the for each loop to traverse your unknown length of strings in the choice set of strings
+            <p class="offset-1">
+                I see you like to use the following platforms
+                <ul>
+                    @foreach (var platform in choices.Split(','))
+                    {
+                        <li class="offset-1">@platform</li>
+                    }
+                </ul>
+            </p>
+        }
+    }
+}
+else
+{
+
+}
+
+<form id="theform" method="post">
+    <div class="row">
+        <div class="offset-1">
+            @* Language Group *@
+            <label id="GameGrouplbl">Select your favourite gaming platforms.</label><br />
+            <input type="checkbox" id="GameGroup" name="GameGroup" value="PS4"
+                   @(Array.IndexOf(choices.Split(','),"PS4") >=0 ? "checked":"") />PS4<br />
+            <input type="checkbox" id="GameGroup" name="GameGroup" value="PC"
+                   @(Array.IndexOf(choices.Split(','),"PC") >=0 ? "checked":"")/>PC<br />
+            <input type="checkbox" id="GameGroup" name="GameGroup" value="XBOX One"
+                   @(Array.IndexOf(choices.Split(','),"XBOX One") >=0 ? "checked":"")/>XBOX One<br />
+            <input type="checkbox" id="GameGroup" name="GameGroup" value="Switch"
+                   @(Array.IndexOf(choices.Split(','),"Switch") >=0 ? "checked":"")/>Switch<br />
+            <input type="checkbox" id="GameGroup" name="GameGroup" value="Wii"
+                   @(Array.IndexOf(choices.Split(','),"Wii") >=0 ? "checked":"")/>Wii<br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="offset-1">
+            <button type="submit" id="theButton" name="theButton" value="Submit" class="btn btn-primary">Submit</button>
+            &nbsp;&nbsp;
+            <button type="submit" id="theButton" name="theButton" value="Reset" class="btn btn-dark">Reset</button>
+        </div>
+    </div>
+</form>
+
+
