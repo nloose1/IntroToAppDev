@@ -1,0 +1,59 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = string.Format("Razor - {0}", "DropdownList");
+}
+
+@section banner{
+    <h1></h1>
+    <h1>Dropdown List (select tag) on Form</h1>
+}
+
+@if (IsPost)
+{
+    var choice = Request.Form["CodingSamples"];
+    switch (choice.ToUpper())
+    {
+        case "TEXTBOX":
+            {
+                //go to another page using the .Redirect("pagename") method of the response object
+                Response.Redirect("BasicForm.cshtml");
+                break;
+            }
+        case "RADIOBUTTON":
+            {
+                //go to another page using the .Redirect("pagename") method of the response object
+                Response.Redirect("RadioButtons.cshtml");
+                break;
+            }
+        case "CHECKBOX":
+            {
+                //go to another page using the .Redirect("pagename") method of the response object
+                Response.Redirect("CheckBoxes.cshtml");
+                break;
+            }
+        default:
+            {
+                <p style="color:firebrick">You need to pick a sample to view</p>
+                break;
+            }
+    }
+}
+else
+{
+
+}
+
+<form id="theform" method="post">
+    <div class="row">
+        <div class="offset-1">
+            <label id="lblCodingSamples">To view a sample, make a selection from the list.</label>&nbsp;&nbsp;
+            <select id="CodingSamples" name="CodingSamples">
+                <option value="">Select</option>'
+                <option value="TextBox">TextBox</option>
+                <option value="RadioButton">RadioButtons</option>
+                <option value="CheckBox">CheckBoxes</option>
+            </select>&nbsp;&nbsp;
+            <button type="submit" id="theButton" name="theButton" value="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>
