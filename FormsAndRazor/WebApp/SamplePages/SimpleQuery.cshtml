@@ -23,11 +23,67 @@
 
     //connect to the database
     var db = Database.Open("NWDB");
+     
+    //the command is what ever you wish sql to execute
+    //you can code your command on a single line or over multiple lines
+    //if over multipule lines ensure your concatination is correct
+    //parameter arguments  will be indicated using indexed place holders
+    //each place holder represents a single value
+    var sqlcommand = "SELECT RegionID, RegionDescription "
+                    + "FROM Region "
+                    + "WHERE RegionID = @0";
 
+    //execute the command 
+    //place holders on the command will need a value in the list of parameters on the execution statement
+    //there is 3 ways to execute a query; the methodsa depend on your expected results
+    //a) a single row         syntax xxx.QuerySingle(command [,list of parameter arguments])
+    //b) one or more rows      syntax xxx.Query(command [,list of parameter arguments])
+    //c) a single value      syntax xxx.QueryValue(command[,list of parameter arguments])
+
+    //pkey lookup will return nothing or a single row
+    var results = db.QuerySingle(sqlcommand, regionarg);
 }
 
 @section banner{
     <h1>Database PKey Simple Query</h1>
+}
+
+@if (IsPost)
+{
+    if (thebutton.Equals("reset"))
+    {
+        regionarg = "";
+        regionid = "";
+        regiondescription = "";
+    }
+    else
+    {
+        //did you get anything back?
+        //always check your results
+        //queryies are checked in two ways DEPENDING on its execution 
+        //A) and C) check for null
+        //B) check the .Count of your collection (.Count = 0)
+        if(results == null)
+        {
+            <p>Nothing was found for the entered region ID.</p>
+            regionid = "";
+            regiondescription = "";
+        }
+        else
+        {
+            //access the data on the record
+            //there are two ways to access your record attributes
+            // xxxx[index]  where index is the column number on the query
+            // xxxx.PropertyName where the column title is the property name
+            //the datat type of the accessed data is the return datatype of the column property
+            regionid = results.RegionID.ToString();
+            regiondescription = results.RegionDescription;
+        }
+    }
+}
+else
+{
+    regionarg = "";
 }
 
 <form id="theform" method="post">
@@ -35,7 +91,7 @@
          <div class="col-6">
              <div class="offset-1">
                 <label id="lblRegionArg" for="RegionArg">Enter a Region ID: </label> &nbsp;&nbsp;
-                <input type="number" step="1" min="1" id="RegionID" name="RegionID" value="@regionarg" placeholder="region id"/>
+                <input type="number" step="1" min="1" id="RegionArg" name="RegionArg" value="@regionarg" placeholder="region id"/>
                  <br/><br/>
                  <button type="submit" id="theButton" name="theButton" value="submit"   class="btn btn-primary">Fetch</button>
                 &nbsp;&nbsp;
