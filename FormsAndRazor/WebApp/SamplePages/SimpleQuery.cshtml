@@ -1,0 +1,55 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = string.Format("Razor - {0}", "Simple PKey Query");
+
+    //global variables
+    //output
+    var regionid = "";
+    var regiondescription = "";
+    //input
+    var regionarg = Request.Form["RegionArg"];
+    var thebutton = Request.Form["theButton"];
+
+    //remember, on the first pass of the page, ypur controls have yet to be created and set to the browser; therefor there value will be null;
+
+    if (string.IsNullOrEmpty(regionarg))
+    {
+        regionarg = "0";
+    }
+
+    //to use the database you require two additional NuGet packages
+    //Microsoft.AspNet.WebPages.Data
+    //Microsoft.AspNet.WebPages.Webdata
+
+    //connect to the database
+    var db = Database.Open("NWDB");
+
+}
+
+@section banner{
+    <h1>Database PKey Simple Query</h1>
+}
+
+<form id="theform" method="post">
+    <div class="row">
+         <div class="col-6">
+             <div class="offset-1">
+                <label id="lblRegionArg" for="RegionArg">Enter a Region ID: </label> &nbsp;&nbsp;
+                <input type="number" step="1" min="1" id="RegionID" name="RegionID" value="@regionarg" placeholder="region id"/>
+                 <br/><br/>
+                 <button type="submit" id="theButton" name="theButton" value="submit"   class="btn btn-primary">Fetch</button>
+                &nbsp;&nbsp;
+                 <button type="submit" id="theButton" name="theButton" value="reset" class="btn btn-light">Reset</button>
+             </div>
+         </div>
+        <div class="col-6">
+            <div class="offset-1">
+                <label id="lblRegionID" for="RegionID">Region ID: </label> &nbsp;&nbsp;
+                <label id="RegionID">@regionid</label>
+                <br /><br />
+                <label id="lblRegionDescription" for="RegionDescription">Region Name: </label> &nbsp;&nbsp;
+                <input type="text" id="RegionID" name="RegionID" value="@regiondescription" placeholder="region id" readonly />
+            </div>
+        </div>
+    </div>         
+</form>
