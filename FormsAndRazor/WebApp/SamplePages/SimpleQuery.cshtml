@@ -23,15 +23,19 @@
 
     //connect to the database
     var db = Database.Open("NWDB");
-     
+
     //the command is what ever you wish sql to execute
     //you can code your command on a single line or over multiple lines
     //if over multipule lines ensure your concatination is correct
     //parameter arguments  will be indicated using indexed place holders
     //each place holder represents a single value
-    var sqlcommand = "SELECT RegionID, RegionDescription "
-                    + "FROM Region "
-                    + "WHERE RegionID = @0";
+    //var sqlcommand = "SELECT RegionID, RegionDescription "
+    //                + "FROM Region "
+    //                + "WHERE RegionID = @0";
+
+    var sqlcommand = @"SELECT RegionID, RegionDescription
+                       FROM Region
+                       WHERE RegionID = @0";
 
     //execute the command 
     //place holders on the command will need a value in the list of parameters on the execution statement

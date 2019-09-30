@@ -1,0 +1,84 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = string.Format("Razor - {0}", "DDL MultiRecord Query");
+
+    var db = Database.Open("NWDB");
+    var sqlcommand = @"SELECT CategoryID, CategoryName
+               FROM Categories
+               Order BY CategoryName";
+    var catinfo = db.Query(sqlcommand);
+}
+
+@section banner{
+    <h1></h1>
+    <h1>Dropdown List Selection Query</h1>
+}
+
+@if (IsPost)
+{
+    //obtain the selected choice
+    var choice = Request.Form["CategoryList"];
+    //is the choice the prompt?
+    if (choice.Equals("0"))
+    {
+        //  yes: message to user
+        <p style="color:firebrick">Select a choice from the list to view the category products</p>
+    }
+    else
+    {
+        //  no:check if there are ano products for the category
+        //create a query to search the products for records with category id choice
+        var productquery = @"SELECT ProductID
+                 FROM Products
+                 WHERE CategoryID = @0";
+        var productinfo = db.Query(productquery, choice);
+        if (productinfo.Count() == 0)
+        {
+            //        yes:message to user
+            <p style="color:firebrick">There are no products for your selected category</p>
+        }
+        else
+        {
+            //        no:Pass selected value to next page
+            //passing data via the url is known as a Get method
+            //data is displayed as plain text in the Url
+            //the data argument is in a lable=value pair
+            //data arguments follow the page name and ?
+            //datat arguments are sepatated by the & symbol
+            //syntax   pagename.cshtml?label=value[&label=value...]
+            //use the Response.Rederect to go to another page
+            Response.Redirect("WebGridDisplay.cshtml?cid=" + choice);
+        }
+
+    }
+}
+else
+{
+    if (catinfo.Count() == 0)
+    {
+        <p style="color: darkslateblue">There are no cetegory records on file.</p>
+    }
+}
+
+<form id="theform" method="post">
+    <div class="offset-2">
+        <label id="lblCategoryList" for="CategroyList">Select Product Category to View</label>
+        &nbsp;&nbsp;
+        <select id="CategoryList" name="CategoryList">
+            <option value="0">Select...</option>
+            @foreach (var item in catinfo)
+            {
+                //loop through the collection of records in the catinfo
+                //creat ea line(option) for each record in the collection
+                //the value attribute will be set to the CategoryID
+                //the display text will be set to the CategorNanme
+                //remember: data access to record properties (columns) is by
+                //a)index     item.[index]
+                //b)property    item.CategoryID
+                <option value="@item.CategoryID">@item.CategoryName</option>
+            }
+        </select>
+        &nbsp;&nbsp;
+        <button type="submit" id="theButton" name="theButton" value="Submit" class="btn btn-primary">Fetch Products for Category...</button>
+    </div>
+</form>
