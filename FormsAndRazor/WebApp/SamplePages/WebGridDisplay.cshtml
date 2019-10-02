@@ -17,26 +17,43 @@
     //get product data
     var db = Database.Open("NWDB");
     var productquery = @"SELECT ProductID, ProductName, UnitPrice, UnitsInStock, Discontinued
-                         FROM Products
-                         WHERE CategoryID = @0
-                         ORDER BY ProductName";
+                        FROM Products
+                        WHERE CategoryID = @0
+                        ORDER BY ProductName";
     var productinfo = db.Query(productquery, cid);
 
     //get category name
     //could the name have been passed with the id: YES
     var catnamequery = @"SELECT CategoryName
-                         FROM Categorys
-                         WHERE CateogoryID = @0";
+                         FROM Categories
+                         WHERE CategoryID = @0";
     var catname = db.QueryValue(catnamequery, cid);
 
     //setup WebGrid instance
     //as you create the instance of the class WebGrid, supply the collection dataset
-    var gridinstance = new WebGrid(productinfo);
+    //to alter the number of rows displayed add the attribute rowsPerPage=value when creating the instance
+    var gridinstance = new WebGrid(productinfo, rowsPerPage:5);
 }
 
 @section banner{
     <h1>WebGrid Display</h1>
 }
+<div class="offset-1">
+    <div class="col-11">
+        <p style="font-size:x-large; color:forestgreen">Products for Category: @catname</p>
 
-<p style="font-size:x-large; color:forestgreen">Products for Category: @catname</p>
-@gridinstance.GetHtml()
+        @gridinstance.GetHtml(
+        tableStyle:"table table-striped table-bordered table-hover",
+        mode:WebGridPagerModes.All,
+        firstText:"Start",
+        lastText:"End",
+        columns:gridinstance.Columns(
+            gridinstance.Column(columnName:"ProductID", header:"ID"),
+            gridinstance.Column(columnName:"ProductName", header:"Product"),
+            gridinstance.Column(columnName:"UnitPrice", header:"$", canSort:false, format:(item) => item.UnitPrice.ToString("0.00")),
+            gridinstance.Column(columnName:"UnitsInStock", header:"QoH", canSort:false),
+            gridinstance.Column(columnName:"Discontinued", header:"Disc", canSort:false, format:@<input type="checkbox" id="Discontinued" name="Discontiued" value="@item.Discontinued" disabled="disabled" @(item.Discontinued == true ? "Checked" : "")/>),
+            gridinstance.Column(header:"", canSort:false, format:@<text><a href="~/SamplePages/WebGridDestination.cshtml?pid=@item.ProductID" onclick="return confirm('Do you wish to view the details of @item.ProductName ?')">View</a></text>)
+        ))
+    </div>
+</div>
