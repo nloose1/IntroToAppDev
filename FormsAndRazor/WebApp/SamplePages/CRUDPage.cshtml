@@ -1,0 +1,86 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = string.Format("Razor - {0}", "CRUD - Insert");
+
+ 
+    //obtain two lists: SupplierList and CategoryList
+    var db = Database.Open("NWDB");
+    var supplierquery = @"SELECT SupplierID, CompanyName
+          FROM Suppliers
+          Order by CompanyName";
+    var categoryquery = @"SELECT CategoryID, CategoryName
+          FROM Categories
+          Order by CategoryName";
+    var supplierlist = db.Query(supplierquery);
+    var categorylist = db.Query(categoryquery);
+
+}
+
+@section banner{
+    <h1>Database: CRUD Product - Insert</h1>
+}
+
+@if (IsPost)
+{
+    //when you have multiple buttons, a good practice is to determine
+    //    what action to do for the press button FIRST!
+
+
+}
+else
+{
+
+}
+
+<form id="theform" method="post">
+    <div class="row">
+        <div class="col-md-6 text-right">
+
+            <label for="ProductName">Name:</label><br />
+            <label for="SupplierID">Supplier:</label><br />
+            <label for="CategoryID">Catgeory:</label><br />
+            <label for="QuantityPerUnit">Qty/Unit:</label><br />
+            <label for="UnitPrice">Price:</label><br />
+            <label for="UnitsInStock">QoH:</label><br />
+            <label for="UnitsOnOrder">QoO:</label><br />
+            <label for="ReorderLevel">RoL:</label><br />
+            <br />
+        </div>
+        <div class="col-me-6 text-left">
+
+            <input type="text"
+                   id="ProductName" name="ProductName" />
+          <br />
+            <select id="SupplierList" name="SupplierList">
+                <option value="0">select supplier...</option>
+                @foreach (var item in supplierlist)
+                {
+                   <option value="@item.SupplierID" >@item.CompanyName</option>
+                }
+            </select>
+            <br />
+            <select id="CategoryList" name="CategoryList">
+                <option value="0">select category...</option>
+                @foreach (var item in categorylist)
+                {
+                    <option value="@item.CategoryID" >@item.CategoryName</option>
+                }
+            </select>
+            <br />
+            <input type="text" id="QuantityPerUnit" name="QuantityPerUnit" /><br />
+            <input type="text" id="UnitPrice" name="UnitPrice" /><br />
+            <input type="text" id="UnitsInStock" name="UnitsInStock" /><br />
+            <input type="text" id="UnitsOnOrder" name="UnitsOnOrder" /><br />
+            <input type="text" id="ReorderLevel" name="ReorderLevel" /><br />
+            <br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <input type="submit" id="FormButton" name="FormButton"
+                   class="btn btn-primary" value="Add" />
+            <input type="submit" id="FormButton" name="FormButton"
+                   class="btn" value="Clear" />
+        </div>
+    </div>
+</form>
