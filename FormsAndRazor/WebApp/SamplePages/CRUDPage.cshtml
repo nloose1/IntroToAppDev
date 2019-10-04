@@ -2,15 +2,23 @@
     Layout = "~/_Layout.cshtml";
     Page.Title = string.Format("Razor - {0}", "CRUD - Insert");
 
- 
+    // is there any nessesary global variables
+    var productname = "";
+    var supplierid = "";
+    var categoryid = "";
+    var quantityperunit = "";
+    var unitprice = "";
+    var unitsinstock = "";
+    var unitsonorder = "";
+    var reorderlevel = "";
     //obtain two lists: SupplierList and CategoryList
     var db = Database.Open("NWDB");
     var supplierquery = @"SELECT SupplierID, CompanyName
-          FROM Suppliers
-          Order by CompanyName";
+  FROM Suppliers
+  Order by CompanyName";
     var categoryquery = @"SELECT CategoryID, CategoryName
-          FROM Categories
-          Order by CategoryName";
+  FROM Categories
+  Order by CategoryName";
     var supplierlist = db.Query(supplierquery);
     var categorylist = db.Query(categoryquery);
 
@@ -22,10 +30,69 @@
 
 @if (IsPost)
 {
+    //obtain the data from the controls
+    supplierid = Request.Form["SupplierList"];
+    productname = Request.Form["ProductName"];
+    categoryid = Request.Form["CategoryList"];
+    quantityperunit = Request.Form["QuantityPerUnit"];
+    unitprice = Request.Form["UnitPrice"];
+    unitsinstock = Request.Form["UnitsInStock"];
+    unitsonorder = Request.Form["UnitsOnOrder"];
+    reorderlevel = Request.Form["ReorderLevel"];
+    var thebutton = Request.Form["FormButton"];
     //when you have multiple buttons, a good practice is to determine
     //    what action to do for the press button FIRST!
+    if (thebutton.Equals("Clear"))
+    {
+        productname = "";
+        supplierid = "";
+        categoryid = "";
+        quantityperunit = "";
+        unitprice = "";
+        unitsinstock = "";
+        unitsonorder = "";
+        reorderlevel = "";
+    }
+    else
+    {
+        //add button
+        //validate data
 
+        //test validation
+        //bad
+        //good
+        try
+        {
+            //connect to database
+            //done above
+            //create innsert command
+            var inscommand = @"INSERT INTO Products (ProductName, SupplierID, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued) VALUES (@0, @1, @2, @3, @4, @5, @6, @7, 0)";
 
+            //execute the command
+            db.Execute(inscommand, productname,
+                supplierid.Equals("0") ? null : supplierid,
+                categoryid.Equals("0") ? null : categoryid,
+                string.IsNullOrEmpty(quantityperunit) ? null : quantityperunit,
+                string.IsNullOrEmpty(unitprice) ? null : unitprice,
+                string.IsNullOrEmpty(unitsinstock) ? null : unitsinstock,
+                string.IsNullOrEmpty(unitsonorder) ? null : unitsonorder,
+                string.IsNullOrEmpty(reorderlevel) ? null : reorderlevel);
+            <div class="col-12 text-center">
+                <p style="color:green">
+                    Product has been added
+                </p>
+            </div>
+
+        }
+        catch (Exception ex)
+        {
+            <div class="col-12 text-center">
+                <p style="color:firebrick; font-size:large">
+                    Processing error: @ex.Message
+                </p>
+            </div>
+        }
+    }
 }
 else
 {
@@ -48,14 +115,26 @@ else
         </div>
         <div class="col-me-6 text-left">
 
-            <input type="text"
+            <input type="text" value="@productname"
                    id="ProductName" name="ProductName" />
-          <br />
+            <br />
             <select id="SupplierList" name="SupplierList">
                 <option value="0">select supplier...</option>
                 @foreach (var item in supplierlist)
                 {
-                   <option value="@item.SupplierID" >@item.CompanyName</option>
+                    //when the select controll is created and loaded
+                    //by defauld the 1st option tage is shown as the selected option
+                    //to retain a previous selected value, you need to test
+                    //  the previous selected value against the current item that is being used to create the option line
+                    //if the previous selected value equals the current item then add the selected attribute to your option tag
+                    if (supplierid == item.SupplierID.ToString())
+                    {
+                        <option value="@item.SupplierID" selected>@item.CompanyName</option>
+                    }
+                    else
+                    {
+                        <option value="@item.SupplierID">@item.CompanyName</option>
+                    }
                 }
             </select>
             <br />
@@ -63,15 +142,23 @@ else
                 <option value="0">select category...</option>
                 @foreach (var item in categorylist)
                 {
-                    <option value="@item.CategoryID" >@item.CategoryName</option>
+                    if (categoryid == item.CategoryID.ToString())
+                    {
+                        <option value="@item.CategoryID" selected>@item.CategoryName</option>
+                    }
+                    else
+                    {
+                        <option value="@item.CategoryID">@item.CategoryName</option>
+                    }
+                    <option value="@item.CategoryID">@item.CategoryName</option>
                 }
             </select>
             <br />
-            <input type="text" id="QuantityPerUnit" name="QuantityPerUnit" /><br />
-            <input type="text" id="UnitPrice" name="UnitPrice" /><br />
-            <input type="text" id="UnitsInStock" name="UnitsInStock" /><br />
-            <input type="text" id="UnitsOnOrder" name="UnitsOnOrder" /><br />
-            <input type="text" id="ReorderLevel" name="ReorderLevel" /><br />
+            <input type="text" id="QuantityPerUnit" name="QuantityPerUnit" value="@quantityperunit" /><br />
+            <input type="text" id="UnitPrice" name="UnitPrice" value="@unitprice" /><br />
+            <input type="text" id="UnitsInStock" name="UnitsInStock" value="@unitsinstock" /><br />
+            <input type="text" id="UnitsOnOrder" name="UnitsOnOrder" value="@unitsonorder" /><br />
+            <input type="text" id="ReorderLevel" name="ReorderLevel" value="@reorderlevel" /><br />
             <br />
         </div>
     </div>
