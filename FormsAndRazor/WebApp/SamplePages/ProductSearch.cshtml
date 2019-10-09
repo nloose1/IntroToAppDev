@@ -20,7 +20,7 @@
   
     <form id="theForm" action="" method="post">
         <div class="col-sm-3">
-            <label id="forProductSearch">Product ID</label><br/>
+            <label id="forProductSearch">Product Name</label><br/>
             <input type="text" name="ProductSearch" value=" @productsearch"><br/><br/>
             <button type="submit" class="btn btn-primary" name="Search" id="theSearch">Search</button>
                     
@@ -41,7 +41,7 @@
                     }
                     else
                     {
-                        var grid = new WebGrid(queryProducts);
+                        var grid = new WebGrid(queryProducts, rowsPerPage: 5);
                         @grid.GetHtml("table table-bordered table-striped table-hover",
                         mode: WebGridPagerModes.All,
                         lastText: "Last",
@@ -58,6 +58,15 @@
                 }
             }
         </div>
-      
+      @* Since the web grid is within the form (using method:post) ther is a problem (conflict) beacuse webgird used the Method:Get
+          the following script causes a post to happen on the web grids get*@
+        <script type="text/javascript">
+            var links = $('a[href*=page], a[href*=sort]'), form = $('form');
+            links.click(function () {
+                form.attr("action", this.href);
+                $(this).attr("href", "javascript:");
+                form.submit();
+            });
+        </script>
     </form>
 </div> 
