@@ -68,10 +68,10 @@
     if (thebutton.Equals("cancel"))
     {
         //options
-        //a) redirect back to search
+        //a) redirect back to the search
         //b) stay on the page
-        //  clear the fields
-        //  msg to user
+        //   clear fields
+        //   msg to user
         productid = "";
         productname = "";
         supplierid = "0";
@@ -85,22 +85,20 @@
         <div class="col-12 text-center">
             <p>
                 <span style="color:brown">
-                    Action cancelled. Return to product search
-                    <a href="~/SamplePages/ProductSearch.cshtml">Go to search</a>
+                    Action cancelled. Return to product search.
                 </span>
+                <a href="~/SamplesPages/ProductSearch.cshtml">go to search...</a>
             </p>
         </div>
     }
     else if (thebutton.Equals("delete"))
     {
-        //if (Validation.IsValid())
-        //{
         //test for logical validation
-        //these are validations that cannot be preformed easily by Validators
+        //these are validation that can not be performed easly by Validators
 
         //assume that the category is a required field
         var valid = true;
-
+       
         if (string.IsNullOrEmpty(productid))
         {
             //bad
@@ -108,42 +106,38 @@
             <div class="col-12 text-center">
                 <p>
                     <span style="color:brown">
-                        You must lookup the current product berfore discontinued Return to product search
-                        <a href="~/SamplePages/ProductSearch.cshtml">Go to poduct search</a>
+                        You must lookup the current product before discontinuing. Return to product search.
                     </span>
+                    <a href="~/SamplesPages/ProductSearch.cshtml">go to search...</a>
                 </p>
             </div>
-
-        }
-
-        if (valid)
-        {
-            //good
-            try
+            }
+            if (valid)
             {
-                //connect to database
-                //done above
-                //there are two techniques used to remove a record off the database processing
-                //a) physical delete (remov the record from the database)
-                //var delcommand = @"DELETE Products
-                //                WHERE ProductID = @0";
-                //b) logical delete (Flag the record not to be logically used)
-                //create delete command
-                var delcommand = @"UPDATE Products SET
-                                   Discontinued = 1
-                                   WHERE ProductID = @0";
-
-                //execute the command
-                //the execute command returns an integer indicationg the unber of rows affected
-                var rowsaffected = db.Execute(delcommand, productid);
-                db.Execute(productid);
-                if (rowsaffected > 0)
+                //good
+                try
                 {
+                    //connect to database
+                    //  done above
+                    //there are two techniques used to remove a record off the database processing
+                    //a) physical delete (remove the record from the database)
+                    //var sqlcommand = @"DELETE Products 
+                    //            WHERE ProductID = @0";
+                    //b) logical delete (flag the record not to be logically used)
+                    //create update command
+                    var sqlcommand = @"UPDATE Products SET
+                                Discontinued = 1
+                                WHERE ProductID = @0";
+                    //execute the command
+                    //the execute command returns an integer indicating the number of rows affected
+                    var rowsaffected = db.Execute(sqlcommand, productid);
+                    if (rowsaffected > 0)
+                    {
+                        productid = "";
+                        discontinued = "1";
                     <div class="col-12 text-center">
-                        <p>
-                            <span style="color:green">
-                                Product has been discontinued
-                            </span>
+                        <p style="color:green">
+                            Product has been discontinued.
                         </p>
                     </div>
                 }
@@ -152,9 +146,9 @@
                     <div class="col-12 text-center">
                         <p>
                             <span style="color:brown">
-                                Unable to disccontinue. Product not found on file. Return to product search
-                                <a href="~/SamplePages/ProductSearch.cshtml">Go to poduct search</a>
+                                Unable to discontinue. Product not found on file. Return to product search.
                             </span>
+                            <a href="~/SamplesPages/ProductSearch.cshtml">go to search...</a>
                         </p>
                     </div>
                 }
@@ -172,11 +166,11 @@
     }
     else
     {
-        //this edit page has no validation controls
+        //this edit page does NOT have any validation controls
         //if (Validation.IsValid())
         //{
         //test for logical validation
-        //these are validations that cannot be preformed easily by Validators
+        //these are validation that can not be performed easly by Validators
 
         //assume that the category is a required field
         var valid = true;
@@ -185,13 +179,9 @@
             //bad
             valid = false;
             <div class="col-12 text-center">
-                <p style="color:blue; font-size:large">
-                    Select a category
-                </p>
+                <p style="color:mediumblue">Select a category.</p>
             </div>
-
         }
-
         if (string.IsNullOrEmpty(productid))
         {
             //bad
@@ -199,53 +189,47 @@
             <div class="col-12 text-center">
                 <p>
                     <span style="color:brown">
-                        You must lookup the current product berfore updating Return to product search
-                        <a href="~/SamplePages/ProductSearch.cshtml">Go to poduct search</a>
+                        You must lookup the current product before updating. Return to product search.
                     </span>
+                    <a href="~/SamplesPages/ProductSearch.cshtml">go to search...</a>
                 </p>
             </div>
-
         }
-
         if (valid)
         {
             //good
             try
             {
                 //connect to database
-                //done above
+                //  done above
                 //create update command
-                var uptcommand = @"UPDATE Products SET
+                var sqlcommand = @"UPDATE Products SET
                         ProductName = @0,
                         SupplierID = @1,
                         CategoryID = @2,
-                        QuantityPerUnit= @3,
+                        QuantityPerUnit = @3,
                         UnitPrice = @4,
-                        UnitsInStock =@5,
-                        UnitsOnOrder =@6,
-                        ReorderLevel =@7,
+                        UnitsInStock = @5,
+                        UnitsOnOrder = @6,
+                        ReorderLevel = @7,
                         Discontinued = @8
                         WHERE ProductID = @9";
-
                 //execute the command
-                //the execute command returns an integer indicationg the unber of rows affected
-                var rowsaffected = db.Execute(uptcommand, productid);
-                db.Execute(uptcommand, productname,
-                    supplierid.Equals("0") ? null : supplierid,
-                    categoryid.Equals("0") ? null : categoryid,
-                    string.IsNullOrEmpty(quantityperunit) ? null : quantityperunit,
-                    string.IsNullOrEmpty(unitprice) ? null : unitprice,
-                    string.IsNullOrEmpty(unitsinstock) ? null : unitsinstock,
-                    string.IsNullOrEmpty(unitsonorder) ? null : unitsonorder,
-                    string.IsNullOrEmpty(reorderlevel) ? null : reorderlevel,
-                    discontinued, productid);
+                //the execute command returns an integer indicating the number of rows affected
+                var rowsaffected = db.Execute(sqlcommand, productname,
+                            supplierid.Equals("0") ? null : supplierid,
+                            categoryid.Equals("0") ? null : categoryid,
+                            string.IsNullOrEmpty(quantityperunit) ? null : quantityperunit,
+                            string.IsNullOrEmpty(unitprice) ? null : unitprice,
+                            string.IsNullOrEmpty(unitsinstock) ? null : unitsinstock,
+                            string.IsNullOrEmpty(unitsonorder) ? null : unitsonorder,
+                            string.IsNullOrEmpty(reorderlevel) ? null : reorderlevel,
+                            discontinued, productid);
                 if (rowsaffected > 0)
                 {
                     <div class="col-12 text-center">
-                        <p>
-                            <span style="color:green">
-                                Product has been updated
-                            </span>
+                        <p style="color:green">
+                            Product has been updated.
                         </p>
                     </div>
                 }
@@ -254,12 +238,13 @@
                     <div class="col-12 text-center">
                         <p>
                             <span style="color:brown">
-                                Product not found on file. Return to product search
-                                <a href="~/SamplePages/ProductSearch.cshtml">Go to poduct search</a>
+                                Update failed. Product not found on file. Return to product search.
                             </span>
+                            <a href="~/SamplesPages/ProductSearch.cshtml">go to search...</a>
                         </p>
                     </div>
                 }
+
             }
             catch (Exception ex)
             {
@@ -271,6 +256,7 @@
             }
         }
 
+        // }
     }
 }
 else //for IsPost
@@ -361,15 +347,18 @@ else //for IsPost
         </div>
         <div class="row">
             <div class="col-12 text-center">
-                <button type="submit" name="theButton" id="theUpdate" class="btn btn-primary" value="update">Update</button>&nbsp;&nbsp;&nbsp;
-                <button type="submit" name="theButton" id="theDelete" formnovalidate class="btn btn-primary" value="delete">Discontinued</button>&nbsp;&nbsp;&nbsp;
-                <button type="submit" name="theButton" id="theCancel" formnovalidate class="btn btn-primary" value="cancel">Cancel</button>
+                <button type="submit" name="theButton" id="theUpdate" 
+                        class="btn btn-primary" value="update">Update</button>&nbsp;&nbsp;&nbsp;
+                <button type="submit" name="theButton" id="theDelete"  formnovalidate
+                        class="btn btn-primary" value="delete">Discontinued</button>&nbsp;&nbsp;&nbsp;
+                <button type="submit" name="theButton" id="theCancel"  formnovalidate
+                        class="btn btn-primary" value="cancel">Cancel</button>
             </div>
         </div>
-        @* This javascript is used for conformation *@
+        @* this javascript is used for confirmation *@
         <script type="text/javascript">
             document.getElementById("theDelete").onclick = ConfirmDelete;
-            function ConfrirmDelete() {
+            function ConfirmDelete() {
                 return confirm("Are you sure you want to remove @productname");
             }
         </script>
