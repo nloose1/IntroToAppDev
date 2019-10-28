@@ -58,13 +58,13 @@ namespace WebApp.SamplePages {
         protected global::System.Web.UI.WebControls.Literal Literal1;
         
         /// <summary>
-        /// ProgramingCourseActive control.
+        /// ProgrammingCourseActive control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox ProgramingCourseActive;
+        protected global::System.Web.UI.WebControls.CheckBox ProgrammingCourseActive;
         
         /// <summary>
         /// Label2 control.
@@ -103,13 +103,13 @@ namespace WebApp.SamplePages {
         protected global::System.Web.UI.WebControls.DropDownList CollectionChoiceList;
         
         /// <summary>
-        /// LinkButton1 control.
+        /// CollectionSubmit control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButton1;
+        protected global::System.Web.UI.WebControls.LinkButton CollectionSubmit;
         
         /// <summary>
         /// MessageLabel control.
