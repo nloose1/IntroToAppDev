@@ -14,7 +14,17 @@ namespace WebApp.SamplePages
             Message.Text = "";
         }
 
-        protected void Jobs_SelectedIndexChanged(object sender, EventArgs e)
+        protected void clear_Click(object sender, EventArgs e)
+        {
+            //remove any data within a control
+            FullName.Text = "";
+            EmailAddress.Text = "";
+            PhoneNumber.Text = "";
+            FullOrPartTime.ClearSelection();
+            Jobs.ClearSelection();
+        }
+
+        protected void Submit_Click(object sender, EventArgs e)
         {
 
         }
