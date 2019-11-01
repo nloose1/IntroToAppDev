@@ -9,9 +9,15 @@ namespace WebApp.SamplePages
 {
     public partial class ContestEntry : System.Web.UI.Page
     {
+        //NO DB using a temporaty List<T>
+        public static List<CEntry> Entries;
         protected void Page_Load(object sender, EventArgs e)
         {
             Message.Text = "";
+            if (!Page.IsPostBack)
+            {
+                Entries = new List<CEntry>();
+            }
         }
     }
 }
