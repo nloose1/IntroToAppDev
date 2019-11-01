@@ -114,7 +114,8 @@
             <div class="col-md-offset-2">
                 <p>
                     <asp:Button ID="Submit" runat="server" Text="Submit" OnClick="Submit_Click" />&nbsp;&nbsp;
-                    <asp:Button ID="Clear" runat="server" Text="Clear" CausesValidation="true" OnClick="Clear_Click"  />
+                    <asp:Button ID="Clear" runat="server" Text="Clear" CausesValidation="False" OnClick="Clear_Click" 
+                         />
                 </p>
                 <asp:Label ID="Message" runat="server" ></asp:Label><br />
 

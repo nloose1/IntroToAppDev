@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace WebApp.SamplePages
 {
+
     public partial class ContestEntry : System.Web.UI.Page
     {
         //NO DB using a temporaty List<T>
@@ -18,6 +19,21 @@ namespace WebApp.SamplePages
             {
                 Entries = new List<CEntry>();
             }
+        }
+
+        protected void Clear_Click(object sender, EventArgs e)
+        {
+            //empty form feilds
+            FirstName.Text = "";
+            LastName.Text = "";
+            StreetAddress1.Text = "";
+            StreetAddress2.Text = "";
+            City.Text = "";
+            Province.ClearSelection();
+            PostalCode.Text = "";
+            EmailAddress.Text = "";
+            CheckAnswer.Text = "";
+            Terms.Checked = false;
         }
 
         protected void Submit_Click(object sender, EventArgs e)
@@ -66,20 +82,6 @@ namespace WebApp.SamplePages
                     Message.Text = "You did not agree to the contest terms. Entry rejected.";
                 }
             }
-        }
-
-        protected void Clear_Click(object sender, EventArgs e)
-        {
-            //empty form feilds
-            FirstName.Text = "";
-            LastName.Text = "";
-            StreetAddress1.Text = "";
-            StreetAddress2.Text = "";
-            City.Text = "";
-            Province.Text = "";
-            PostalCode.Text = "";
-            EmailAddress.Text = "";
-            CheckAnswer.Text = "";
         }
     }
 }
