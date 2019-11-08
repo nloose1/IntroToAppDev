@@ -27,7 +27,18 @@ namespace WebApplication1.Pages
                 {
                     UserRegistration theEntry = new UserRegistration();
 
-                    Entries.Add(new UserRegistration(FirstName.Text, LastName.Text, UserName.Text, Email.Text, Password.Text));
+                    theEntry.FirstName = FirstName.Text;
+                    theEntry.LastName = LastName.Text;
+                    theEntry.UserName = UserName.Text;
+                    theEntry.EmailAddress = Email.Text;
+                    theEntry.Password = Password.Text;
+                    Entries.Add(theEntry);
+
+                    //Entries.Add(new UserRegistration(FirstName.Text,
+                    //                                 LastName.Text,
+                    //                                 UserName.Text,
+                    //                                 Email.Text,
+                    //                                 Password.Text));
 
                     RegList.DataSource = Entries;
                     RegList.DataBind();

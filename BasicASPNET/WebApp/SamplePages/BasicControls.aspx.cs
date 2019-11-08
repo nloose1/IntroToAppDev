@@ -88,7 +88,7 @@ namespace WebApp.SamplePages
             if (string.IsNullOrEmpty(submitchoice))
             {
                 //"LEFT" side uses the Property's SET
-                MessageLabel.Text = "You did not enter a valude for your program choice";
+                MessageLabel.Text = "You did not enter a value for your program choice";
                 ResetFields();
             }
             else

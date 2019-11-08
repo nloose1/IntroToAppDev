@@ -74,6 +74,7 @@ namespace WebApp.SamplePages
                                             PostalCode.Text,
                                             EmailAddress.Text));
                     //display the collection
+                    //EntryList is the id of the web grid in the main file
                     EntryList.DataSource = Entries;
                     EntryList.DataBind();
                 }

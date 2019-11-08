@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="UserReg.aspx.vb" Inherits="WebApplication1.Pages.UserReg" %>
+﻿<%@ Page Title="User Reg" Language="C#" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="UserReg.aspx.cs" Inherits="WebApplication1.Pages.UserReg" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <h1>User Registration</h1>
     <div class="alert alert-info">
