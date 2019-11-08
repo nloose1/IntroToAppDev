@@ -3,7 +3,7 @@
     <div class="page-header">
         <h1>Contest Entry</h1>
     </div>
-
+    <%-- ***DONT forget script at bottom --%>
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-info">
