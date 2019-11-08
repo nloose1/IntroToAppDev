@@ -10,12 +10,14 @@
     <asp:RequiredFieldValidator ID="RequiredFirstName" runat="server" ErrorMessage="First Name Required" Display="None" SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="FirstName"></asp:RequiredFieldValidator>
     <asp:RequiredFieldValidator ID="RequiredLastName" runat="server" ErrorMessage="Last Name Required" Display="None" SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="LastName"></asp:RequiredFieldValidator>
     <asp:RequiredFieldValidator ID="RequiredUserName" runat="server" ErrorMessage="User Name Required" Display="None" SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="UserName"></asp:RequiredFieldValidator>
-    <asp:CompareValidator ID="CompareEmail" runat="server" ErrorMessage="Email Address must match confirm email" Display="None" SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="Email" Operator="Equal" ValueToCompare="ConfirmEmail" Type="String"></asp:CompareValidator>
-    <asp:CompareValidator ID="ComparePassword" runat="server" ErrorMessage="Password must match confirm Password" Display="None" SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="Password" Operator="Equal" ValueToCompare="ConfirmPassword" Type="String"></asp:CompareValidator>
-    <asp:RegularExpressionValidator ID="RegularExpressionPassword" runat="server" ErrorMessage="Password must be between 4 and 8 and have one numeric diget" Display="None" SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="Password" ValidationExpression="^(?=.*[0-9])(?=.{4,})$"></asp:RegularExpressionValidator>
+    <asp:CompareValidator ID="CompareEmail" runat="server" ErrorMessage="Email Address must match confirm email" Display="None" SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="Email" Operator="NotEqual" ValueToCompare="ConfirmEmail" Type="String"></asp:CompareValidator>
+
+    <asp:CompareValidator ID="ComparePassword" runat="server" ErrorMessage="Password must match confirm Password" Display="None" SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="Password" Operator="NotEqual" ValueToCompare="ConfirmPassword" Type="String"></asp:CompareValidator>
+
+    <asp:RegularExpressionValidator ID="RegularExpressionPassword" runat="server" ErrorMessage="Password must be between 4 and 8 and have one numeric diget" Display="None" SetFocusOnError="true" ForeColor="Firebrick" ControlToValidate="Password" ValidationExpression="^(?=.*\d).{4,8}$"></asp:RegularExpressionValidator>
 
 
-
+    <asp:ValidationSummary ID="ValidationSummary1" runat="server" CssClass="alert alert-danger" />
 
 
     <div class="row">
@@ -43,9 +45,13 @@
                 <asp:TextBox ID="ConfirmPassword" runat="server" MaxLength="8"></asp:TextBox>
 
             </fieldset>
-                <asp:CheckBox ID="CheckBox2" runat="server" text="I agree to terms"/><br />
+                <asp:CheckBox ID="Terms" runat="server" text="I agree to terms"/><br />
 
-                <asp:Button ID="Submit" runat="server" Text="Enter Reg" />
+                <asp:Button ID="Submit" runat="server" Text="Enter Reg" OnClick="Submit_Click" />
+
+            <asp:Label ID="Message" runat="server" ></asp:Label><br />
+            <asp:GridView ID="RegList" runat="server"></asp:GridView>
+
         </div>
     </div>
     <script src="../Scripts/bootwrap-freecode.js"></script>

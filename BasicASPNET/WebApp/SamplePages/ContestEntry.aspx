@@ -3,7 +3,7 @@
     <div class="page-header">
         <h1>Contest Entry</h1>
     </div>
-    <%-- ***DONT forget script at bottom --%>
+    <%-- ***DONT forget script at bottom OR Grid View OR Possible MEssage Also MAke sure to put in validation summary Validation against another field is NotEqual --%>
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-info">
