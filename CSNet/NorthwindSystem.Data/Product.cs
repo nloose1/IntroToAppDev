@@ -63,7 +63,7 @@ namespace NorthwindSystem.Data
         //lets assume you would like to concatinate some fields together within your application on several occasions such as creating a full name out of two attributes like FirstName and LastName 
 
         //these read only properties are NON mapped fields 
-        //they dp not exist on the sql table 
+        //they do not exist on the sql table 
         //entity framework does not expect to be supplied data nor will it supply data for the property
         [NotMapped]
         public string ProductandID
