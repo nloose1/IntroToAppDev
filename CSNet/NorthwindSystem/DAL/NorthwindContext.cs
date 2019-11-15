@@ -32,5 +32,6 @@ namespace NorthwindSystem.DAL
         //the coding standard for this course will be plural for the DbSet<T> property names
         public DbSet<Product> Products { get; set; }
         public DbSet<Region> Regions { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }
