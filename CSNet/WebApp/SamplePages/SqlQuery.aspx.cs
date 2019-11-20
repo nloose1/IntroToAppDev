@@ -69,5 +69,26 @@ namespace WebApp.SamplePages
                 }
             }
         }
+
+        protected void ProductList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //treat the Gridview as if it where an indexed tble of rows
+            //columns which have ITemplate with web controls can be accessed via web control id value
+
+            //create a local alias to point to the table row of intrest
+            GridViewRow agvrow = ProductList.Rows[ProductList.SelectedIndex];
+
+            //individual columns on a grid view can be accessed DEPENDNG on how they where defined in the GridView 
+            //syntaz (agvrow.FindControl("XXXX") as controltype)/controltypeaccess
+            //  where agvrow is the selected row
+            //xxxx is the control on the gridview row using the ID attribute
+            //controltyppe is the control type (Label,Textbox,Checkbox,DropdownList,...)
+            //controltypeacess is how the particular control type is accessing
+            //data is returned as a string
+            string productid = (agvrow.FindControl("ProductID") as Label).Text;
+
+            //pass the data to our RecivingPage
+            Response.Redirect("ReceivingPage.aspx?pid=" + productid);
+        }
     }
 }
