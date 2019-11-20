@@ -8,7 +8,7 @@
         <br /> <br />
         <asp:Label ID="MessageLabel" runat="server"></asp:Label>
         <br />
-        <asp:GridView ID="ProductList" runat="server" AutoGenerateColumns="False" CssClass="table table-striped" GridLines="Horizontal" BorderStyle="None" OnSelectedIndexChanged="ProductList_SelectedIndexChanged">
+        <asp:GridView ID="ProductList" runat="server" AutoGenerateColumns="False" CssClass="table table-striped" GridLines="Horizontal" BorderStyle="None" OnSelectedIndexChanged="ProductList_SelectedIndexChanged" AllowPaging="True" OnPageIndexChanging="ProductList_PageIndexChanging" PageSize="5">
             <Columns>
                 <asp:CommandField SelectText="View" ShowSelectButton="True" ButtonType="Button" CausesValidation="false"></asp:CommandField>
                 <asp:TemplateField HeaderText="ID">
@@ -46,6 +46,7 @@
             <EmptyDataTemplate>
                 this is a message to tell the user there is no data to display
             </EmptyDataTemplate>
+            <PagerSettings FirstPageText="Start" LastPageImageUrl="End" Mode="NumericFirstLast" PageButtonCount="3" />
         </asp:GridView>
     </div>
 </asp:Content>

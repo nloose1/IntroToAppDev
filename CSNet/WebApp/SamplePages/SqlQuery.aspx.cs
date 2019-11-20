@@ -90,5 +90,19 @@ namespace WebApp.SamplePages
             //pass the data to our RecivingPage
             Response.Redirect("ReceivingPage.aspx?pid=" + productid);
         }
+
+        protected void ProductList_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            //events usually come with a aset of arguments
+            //the particular class of arguments are found in the event header
+            //different events have dfferent argument classes
+
+            //you must set the grid view page index  to the newe page index carried by the e instance
+            ProductList.PageIndex = e.NewPageIndex;
+
+            //you must refresh your data collection and assign it to the control
+            Fetch_Click(sender, new EventArgs());
+
+        }
     }
 }
