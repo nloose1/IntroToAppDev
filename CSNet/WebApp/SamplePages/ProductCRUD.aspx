@@ -29,7 +29,8 @@
     <asp:RangeValidator ID="RangeReorderLevel" runat="server" 
         ErrorMessage="Reorder levlel must be between 0 and 32767" Display="None" SetFocusOnError="true" ForeColor="Firebrick"
          ControlToValidate="ReorderLevel"  MaximumValue="32767" MinimumValue="0" Type="Integer"> </asp:RangeValidator>
-   
+    <%-- Validation summary control --%>
+    <asp:ValidationSummary ID="ValidationSummary1" runat="server" HeaderText="Address the following concerns with your entered data"/>
       <%--  this will be the lookup control area--%>
          <div class="col-md-12"> 
              <asp:Label ID="Label5" runat="server" Text="Select a Product"></asp:Label>&nbsp;&nbsp;
@@ -45,7 +46,8 @@
                 <ItemTemplate>
                     <%# Container.DataItem %>
                 </ItemTemplate>
-             </asp:DataList>
+             </asp:DataList> 
+             <%-- DO NOT NEED TO USE SPECIALIZED ERROR HANDLING --%>
 
         
         </div>
