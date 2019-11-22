@@ -143,5 +143,73 @@ namespace WebApp.NorthwindPages
             CategoryList.ClearSelection();
             SupplierList.ClearSelection();
         }
+
+        protected void Search_Click(object sender, EventArgs e)
+        {
+            if (CategoryList.SelectedIndex == 0)
+            {
+                errormsgs.Add("Must select a category to view its products");
+                LoadMessageDisplay(errormsgs, "alert alert-info");
+            }
+            else
+            {
+                try
+                {
+                    ProductController sysmgr = new ProductController();
+                    Product info = null;
+                    info = sysmgr.Products_FindByID(int.Parse(ProductList.SelectedValue));
+                    if(info == null)
+                    {
+                        errormsgs.Add("Product no longer on file");
+                        LoadMessageDisplay(errormsgs, "alert alert-info");
+                        //optionally
+                        //refresh the page
+                        //  clear out the fields
+                        //  reload the ProductList to remove the product that was not found
+                        Clear_Click(sender, e);
+                        BindProductList();
+                    }
+                    else
+                    {
+                        ProductID.Text = info.ProductID.ToString();
+                        ProductName.Text = info.ProductName;
+                        QuantityPerUnit.Text = 
+                            info.QuantityPerUnit == null ? "" : info.QuantityPerUnit;
+                        UnitPrice.Text = 
+                            info.UnitPrice.HasValue ? string.Format("{0:0.00}", info.UnitPrice.Value) : "";
+                        UnitsInStock.Text = 
+                            info.UnitsInStock.HasValue ? info.UnitsInStock.Value.ToString() : "" ;
+                        UnitsOnOrder.Text = 
+                            info.UnitsOnOrder.HasValue ? info.UnitsOnOrder.Value.ToString() : "";
+                        ReorderLevel.Text = 
+                            info.ReorderLevel.HasValue ? info.ReorderLevel.Value.ToString() : ""; ;
+                        Discontinued.Checked = info.Discontinued;
+                        if (info.CategoryID.HasValue)
+                        {
+                            CategoryList.SelectedValue = info.CategoryID.ToString();
+                        }
+                        else
+                        {
+                            CategoryList.SelectedIndex = 0;
+                        }
+
+                        if (info.SupplierID.HasValue)
+                        {
+                            SupplierList.SelectedValue = info.SupplierID.ToString();
+                        }
+                        else
+                        {
+                            SupplierList.SelectedIndex = 0;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    errormsgs.Add(GetInnerException(ex).ToString());
+                    LoadMessageDisplay(errormsgs, "alert alert-info");
+                }
+            }
+        }
     }
 }
