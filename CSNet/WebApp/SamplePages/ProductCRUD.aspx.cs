@@ -1,14 +1,11 @@
-﻿using System;
+﻿using NorthwindSystem.BLL;
+using NorthwindSystem.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
-#region Additional Namespaces
-using NorthwindSystem.BLL;
-using NorthwindSystem.Data;
-#endregion
 
 namespace WebApp.NorthwindPages
 {
@@ -19,9 +16,13 @@ namespace WebApp.NorthwindPages
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //this following code replaced the basic label MessageLabel control to clear old mesages
-            //the control being used for the error handling display of messages will be a data list control
-            //the clearing of the DataList control is done by assigning a null as athe collection and binding that empty collection to the control
+            //this following code replaces the basic Label MessageLabel control
+            //   to clear old message
+            //the control being used for the error handling display of messages
+            //   will be a DataList
+            //the clearing of the DataList control is done by assinging a null
+            //   as the collection and binding that emplty collection to the
+            //   control
             Message.DataSource = null;
             Message.DataBind();
 
@@ -58,10 +59,10 @@ namespace WebApp.NorthwindPages
             Message.DataSource = errormsglist;
             Message.DataBind();
         }
-        #region Loading and Binding of DDL's
+        #region Loading and Binding of DDLs
         protected void BindCategoryList()
         {
-            //standrd lookup 
+            //standard lookup
             try
             {
                 CategoryController sysmgr = new CategoryController();
@@ -72,19 +73,18 @@ namespace WebApp.NorthwindPages
                 CategoryList.DataTextField = nameof(Category.CategoryName);
                 CategoryList.DataValueField = nameof(Category.CategoryID);
                 CategoryList.DataBind();
-                CategoryList.Items.Insert(0, "Select...");
+                CategoryList.Items.Insert(0, "select...");
+
             }
             catch (Exception ex)
             {
-
-                errormsgs.Add (GetInnerException(ex).ToString());
+                errormsgs.Add(GetInnerException(ex).ToString());
                 LoadMessageDisplay(errormsgs, "alert alert-danger");
             }
         }
-
         protected void BindSupplierList()
         {
-            //standrd lookup 
+            //standard lookup
             try
             {
                 SupplierController sysmgr = new SupplierController();
@@ -95,18 +95,18 @@ namespace WebApp.NorthwindPages
                 SupplierList.DataTextField = nameof(Supplier.ContactName);
                 SupplierList.DataValueField = nameof(Supplier.SupplierID);
                 SupplierList.DataBind();
-                SupplierList.Items.Insert(0, "Select...");
+                SupplierList.Items.Insert(0, "select...");
+
             }
             catch (Exception ex)
             {
-
                 errormsgs.Add(GetInnerException(ex).ToString());
                 LoadMessageDisplay(errormsgs, "alert alert-danger");
             }
         }
         protected void BindProductList()
         {
-            //standrd lookup 
+            //standard lookup
             try
             {
                 ProductController sysmgr = new ProductController();
@@ -117,15 +117,16 @@ namespace WebApp.NorthwindPages
                 ProductList.DataTextField = nameof(Product.ProductName);
                 ProductList.DataValueField = nameof(Product.ProductID);
                 ProductList.DataBind();
-                ProductList.Items.Insert(0, "Select...");
+                ProductList.Items.Insert(0, "select...");
+
             }
             catch (Exception ex)
             {
-
                 errormsgs.Add(GetInnerException(ex).ToString());
                 LoadMessageDisplay(errormsgs, "alert alert-danger");
             }
         }
+
         #endregion
 
         protected void Clear_Click(object sender, EventArgs e)
@@ -138,34 +139,34 @@ namespace WebApp.NorthwindPages
             UnitsOnOrder.Text = "";
             ReorderLevel.Text = "";
             Discontinued.Checked = false;
-            ProductList.SelectedIndex = 0;
-            //can use either privious or following ways
+            ProductList.ClearSelection();
             CategoryList.ClearSelection();
             SupplierList.ClearSelection();
         }
 
         protected void Search_Click(object sender, EventArgs e)
         {
-            if (CategoryList.SelectedIndex == 0)
+            if (ProductList.SelectedIndex == 0)
             {
-                errormsgs.Add("Must select a category to view its products");
+                errormsgs.Add("Select a product to maintain");
                 LoadMessageDisplay(errormsgs, "alert alert-info");
             }
             else
             {
+                //standard lookup
                 try
                 {
                     ProductController sysmgr = new ProductController();
                     Product info = null;
                     info = sysmgr.Products_FindByID(int.Parse(ProductList.SelectedValue));
-                    if(info == null)
+                    if (info == null)
                     {
-                        errormsgs.Add("Product no longer on file");
+                        errormsgs.Add("Product is no longer on file.");
                         LoadMessageDisplay(errormsgs, "alert alert-info");
                         //optionally
                         //refresh the page
-                        //  clear out the fields
-                        //  reload the ProductList to remove the product that was not found
+                        //    clear out the fields
+                        //    reload the ProductList to remove of product that was not found
                         Clear_Click(sender, e);
                         BindProductList();
                     }
@@ -173,16 +174,16 @@ namespace WebApp.NorthwindPages
                     {
                         ProductID.Text = info.ProductID.ToString();
                         ProductName.Text = info.ProductName;
-                        QuantityPerUnit.Text = 
+                        QuantityPerUnit.Text =
                             info.QuantityPerUnit == null ? "" : info.QuantityPerUnit;
-                        UnitPrice.Text = 
+                        UnitPrice.Text =
                             info.UnitPrice.HasValue ? string.Format("{0:0.00}", info.UnitPrice.Value) : "";
-                        UnitsInStock.Text = 
-                            info.UnitsInStock.HasValue ? info.UnitsInStock.Value.ToString() : "" ;
-                        UnitsOnOrder.Text = 
+                        UnitsInStock.Text =
+                            info.UnitsInStock.HasValue ? info.UnitsInStock.Value.ToString() : "";
+                        UnitsOnOrder.Text =
                             info.UnitsOnOrder.HasValue ? info.UnitsOnOrder.Value.ToString() : "";
-                        ReorderLevel.Text = 
-                            info.ReorderLevel.HasValue ? info.ReorderLevel.Value.ToString() : ""; ;
+                        ReorderLevel.Text =
+                            info.ReorderLevel.HasValue ? info.ReorderLevel.Value.ToString() : "";
                         Discontinued.Checked = info.Discontinued;
                         if (info.CategoryID.HasValue)
                         {
@@ -192,7 +193,6 @@ namespace WebApp.NorthwindPages
                         {
                             CategoryList.SelectedIndex = 0;
                         }
-
                         if (info.SupplierID.HasValue)
                         {
                             SupplierList.SelectedValue = info.SupplierID.ToString();
@@ -202,12 +202,13 @@ namespace WebApp.NorthwindPages
                             SupplierList.SelectedIndex = 0;
                         }
                     }
+
+
                 }
                 catch (Exception ex)
                 {
-
                     errormsgs.Add(GetInnerException(ex).ToString());
-                    LoadMessageDisplay(errormsgs, "alert alert-info");
+                    LoadMessageDisplay(errormsgs, "alert alert-danger");
                 }
             }
         }

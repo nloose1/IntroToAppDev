@@ -1,49 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 #region Additional Namespaces
-using NorthwindSystem.Data;
 using NorthwindSystem.DAL;
-using System.Data.SqlClient;
+using NorthwindSystem.Data;
 #endregion
 
 namespace NorthwindSystem.BLL
 {
     public class ProductController
     {
-        //this lookup technique will be used for any non primary key lookup
+        //using SqlQuery to do non primary key lookups
         public List<Product> Products_FindByCategory(int categoryid)
         {
             using (var context = new NorthwindContext())
             {
                 //syntax
-                //context.Database.SqlQuery<T>("sqlprocname [@parameterid[,@parameterid,...]]" [, new SqlParameter("parameterid", value)[, new SqlParameter("paramerterid",value),...]);
-                //Examples
-                //context.Database.SqlQuery<T>("sqlprocname"); //NO parameters
-                //context.Database.SqlQuery<T>("sqlprocname @parameterid" , new SqlParameter("Parameterid",value)); one perameter
-                //context.Database.SqlQuery<T>("sqlprocname @parameterid" , new SqlParameter("Parameterid",value) , new SqlParameter("Parameterid",value)); multiple perameters
+                //context.Database.SqlQuery<T>("sqlprocname [@parameterid[,@parameterid, ...]]"
+                //      [, new SqlParameter("parameterid", value)[, new SqlParameter("parameterid",value)]]);
+                //examples
+                //context.Database.SqlQuery<T>("sqlprocname");  no parameters
+                //context.Database.SqlQuery<T>("sqlprocname @parameterid"
+                //      , new SqlParameter("parameterid", value)); one parameter
+                //context.Database.SqlQuery<T>("sqlprocname @parameterid,@parameterid"
+                //      , new SqlParameter("parameterid", value), new SqlParameter("parameterid",value)); +1> parameters
 
-                //the datatype of the return sql data is IEnumerable<T>
-                IEnumerable <Product> results= context.Database.SqlQuery<Product>("Products_GetByCategories @CategoryID" , new SqlParameter("CategoryID", categoryid));
-
+                //the return datatype of this query is IEnumerable<T>
+                IEnumerable<Product> results =
+                    context.Database.SqlQuery<Product>("Products_GetByCategories @CategoryID"
+                        , new SqlParameter("CategoryID", categoryid));
                 return results.ToList();
-
             }
         }
         public List<Product> Products_List()
         {
-            using (var context = new NorthwindContext())
+
+            using(var context = new NorthwindContext())
             {
                 return context.Products.ToList();
             }
         }
-
         public Product Products_FindByID(int productid)
         {
-            using(var context = new NorthwindContext())
+
+            using (var context = new NorthwindContext())
             {
                 return context.Products.Find(productid);
             }
@@ -51,29 +55,38 @@ namespace NorthwindSystem.BLL
 
         public int Products_Add(Product item)
         {
-            //at some point in time your individual product fields must be placed in an instance of the class this can be done on the web page or within this method 
+            //at some point in time, your individual product fields
+            //    must be placed in an instance of the class
+            //this can be done on the web page or within this method
 
             //start a transaction
             using (var context = new NorthwindContext())
             {
-                //step one
-                //stage th edata for exicution by the comit statement
-                //staging is done in local memory
-                //staging does not create an identity value; this is done at commit time 
+                //Step One
+                //Stage the data for execution by the commit statement
+                //Staging is done in local memory
+                //Staging DOES NOT create an identity value; this is done
+                //    at commit time
                 context.Products.Add(item);
 
-                //step two
+                //Step Two
                 //commit your staged record to the database
-                //if the commiting command is successful then the new identity value will exist in your data instance
-                //if the committing command is not successfull, the transaction is ROLLBACK
+                //if the committing command is successful, then the new
+                //    identity value WILL exist in your data instance
+                //if the committing command is NOT successful, the
+                //    transaction is ROLLBACK
                 context.SaveChanges();
 
                 //optionally
-                //you may decide to return the new identity value to the web page
-                //if you decide to return the value then the method has a returndatatype of int else the method should be using a return datatype of void
-                //SINCE the commit command worked (if you are exicuting this statement)
-                //  you will find the identity value in your instance
+                //you may decide to return the new identity value to
+                //    the web page
+                //if you decide to return the value, then the method has a
+                //    returndatatype of int; else the method should be using
+                //    a returndatatype of void
+                //SINCE the commit command worked (if you are executing this statement)
+                //    you will find the identity value in your instance
                 return item.ProductID;
+
             }
         }
     }

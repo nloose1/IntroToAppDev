@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 #region Additional Namespaces
-using NorthwindSystem.Data;
 using NorthwindSystem.DAL;
+using NorthwindSystem.Data;
 #endregion
 
 namespace NorthwindSystem.BLL

@@ -20,9 +20,10 @@ namespace WebApp.SamplePages
                 }
                 else
                 {
-                    Messagelabel.Text = "you passed the following data value >" + pid + "<";
+                    MessageLabel.Text = "you passed the following data: >" + pid + "<";
                 }
             }
+            
         }
 
         protected void Back_Click(object sender, EventArgs e)
