@@ -71,6 +71,8 @@ namespace NorthwindSystem.BLL
 
                 //Step Two
                 //commit your staged record to the database
+                //IF there is any entity calidation annotation it will be executed during the .SaveChanges() processing
+                //if any entity validation error is discovered, the messages are returned and the commit is aborted
                 //if the committing command is successful, then the new
                 //    identity value WILL exist in your data instance
                 //if the committing command is NOT successful, the
@@ -87,6 +89,61 @@ namespace NorthwindSystem.BLL
                 //    you will find the identity value in your instance
                 return item.ProductID;
 
+            }
+        }
+        //Update 
+        //change the entire entity record
+        //it does not matter logically that you change a value to itself
+        //by chnaging the entire entity you change all fields that new to be alterd
+        //the value returned is the number of rows affected
+        public int Products_Update(Product item)
+        {
+            using (var context = new NorthwindContext())
+            {
+                //staging 
+                context.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                //commit and feedback(rows affected)
+                return context.SaveChanges();
+            }
+        }
+
+        //Delete
+        //Delete (Physical) or change (logical delete so really an update) the entire entiry record
+        //the value returned is the number of rows affected
+        public int Products_Delete(int productid)
+        {
+            using (var context = new NorthwindContext())
+            {
+                ////Physical Delete
+                ////the physical removal of a record from a database
+
+                ////locate the instance of the entity to be removed
+                //var existing = context.Products.Find(productid);
+                ////optional check to see if it is there
+                ////if not throw an exception
+                ////this process can also be handled on the web form during feedback
+                //if (existing == null)
+                //{
+                //    throw new Exception("Record has been removed from database");
+                //}
+
+                ////stage
+                //context.Products.Remove(existing);
+                ////Commit and feedback
+                //return context.SaveChanges();
+
+                //Logical Delete
+                //you normally set a property to a spesific value to indicate the record should be concidered gone
+                //this is actually an update of the record
+
+                //locate the instance of the entity to be changed
+                var existing = context.Products.Find(productid);
+                //set the property to the specific value
+                existing.Discontinued = true;
+                //stage and update
+                context.Entry(existing).State = System.Data.Entity.EntityState.Modified;
+                //commit the feeback
+                return context.SaveChanges();
             }
         }
     }
