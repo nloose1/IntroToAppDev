@@ -14,6 +14,7 @@ namespace NorthwindSystem.BLL
 {
     public class ProductController
     {
+        #region Queries
         //using SqlQuery to do non primary key lookups
         public List<Product> Products_FindByCategory(int categoryid)
         {
@@ -52,7 +53,8 @@ namespace NorthwindSystem.BLL
                 return context.Products.Find(productid);
             }
         }
-
+        #endregion
+        #region Add, Update and Delete
         public int Products_Add(Product item)
         {
             //at some point in time, your individual product fields
@@ -71,8 +73,10 @@ namespace NorthwindSystem.BLL
 
                 //Step Two
                 //commit your staged record to the database
-                //IF there is any entity calidation annotation it will be executed during the .SaveChanges() processing
-                //if any entity validation error is discovered, the messages are returned and the commit is aborted
+                //IF there is ANY entity validation annotation, it will
+                //    be executed during the .SaveChanges() processing
+                //If any entity validation error is discovered, the message(s)
+                //    are returned AND the commit is ABORTED
                 //if the committing command is successful, then the new
                 //    identity value WILL exist in your data instance
                 //if the committing command is NOT successful, the
@@ -91,60 +95,63 @@ namespace NorthwindSystem.BLL
 
             }
         }
-        //Update 
+
+        //Update
         //change the entire entity record
-        //it does not matter logically that you change a value to itself
-        //by chnaging the entire entity you change all fields that new to be alterd
-        //the value returned is the number of rows affected
+        //it does not matter LOGICALLY that you change a value to itself
+        //by changing the entire entity, you change all fields that need to be altered
+        //the value return is the number of rows affected
         public int Products_Update(Product item)
         {
             using (var context = new NorthwindContext())
             {
-                //staging 
+                //Staging
                 context.Entry(item).State = System.Data.Entity.EntityState.Modified;
-                //commit and feedback(rows affected)
+                //Commit and Feedback (rows affected)
                 return context.SaveChanges();
             }
         }
 
         //Delete
-        //Delete (Physical) or change (logical delete so really an update) the entire entiry record
+        //delete (physical) or change (logical delete really and update) the entire entity record
         //the value returned is the number of rows affected
         public int Products_Delete(int productid)
         {
             using (var context = new NorthwindContext())
             {
-                ////Physical Delete
-                ////the physical removal of a record from a database
+                //Physical Delete
+                //the physical removal of a record from the database
 
                 ////locate the instance of the entity to be removed
                 //var existing = context.Products.Find(productid);
                 ////optional check to see if it is there
-                ////if not throw an exception
+                ////if not throw an exception.
                 ////this process can also be handled on the web form during feedback
                 //if (existing == null)
                 //{
-                //    throw new Exception("Record has been removed from database");
+                //    throw new Exception("Record has been remove from database");
                 //}
 
-                ////stage
+                ////Stage
                 //context.Products.Remove(existing);
-                ////Commit and feedback
+                ////Commmit and feedback
                 //return context.SaveChanges();
 
-                //Logical Delete
-                //you normally set a property to a spesific value to indicate the record should be concidered gone
+                //Logical delete
+                //you normally set a peroperty to a specific value to
+                //   indicate the record should be considered "gone"
                 //this is actually an update of the record
 
                 //locate the instance of the entity to be changed
                 var existing = context.Products.Find(productid);
                 //set the property to the specific value
                 existing.Discontinued = true;
-                //stage and update
+                //Stage an update
                 context.Entry(existing).State = System.Data.Entity.EntityState.Modified;
-                //commit the feeback
+                //Commit and feedback
                 return context.SaveChanges();
             }
         }
+        #endregion
     }
 }

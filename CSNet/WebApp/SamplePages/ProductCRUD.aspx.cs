@@ -6,13 +6,13 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 
 #region Additional Namespaces
+using NorthwindSystem.BLL;
+using NorthwindSystem.Data;
 using System.Data.Entity.Validation;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Core;
-using NorthwindSystem.BLL;
-using NorthwindSystem.Data;
-#endregion
 
+#endregion
 namespace WebApp.NorthwindPages
 {
     public partial class ProductCRUD : System.Web.UI.Page
@@ -224,46 +224,49 @@ namespace WebApp.NorthwindPages
             //ensure validation is still good
             if (Page.IsValid)
             {
-                //event code validation that was not accoplished on the web form
+                //event code validation that was not accomplished on
+                //   the web form
                 //examples
-                //assume that the category id is required
-                if(CategoryList.SelectedIndex == 0)
+                //Assume that the CategoryID is required
+                if (CategoryList.SelectedIndex == 0)
                 {
                     errormsgs.Add("Category is required");
                 }
-                if(QuantityPerUnit.Text.Length > 20)
+                if (QuantityPerUnit.Text.Length > 20)
                 {
-                    errormsgs.Add("Quantity per unit is limited to 20 charecter");
+                    errormsgs.Add("Quantity per Unit is limited to 20 characters");
                 }
 
                 //check if click event validation is good
-                if(errormsgs.Count > 0)
+                if (errormsgs.Count > 0)
                 {
                     LoadMessageDisplay(errormsgs, "alert alert-info");
                 }
                 else
                 {
-                    //assume that the data is valid to our knowledge
+                    //assume taht the data is validate to our knowledge
                     try
                     {
                         //standard add to a database
                         //connect to the appropriate controller
                         ProductController sysmgr = new ProductController();
                         //create and load an instance of the entity record
-                        //  since there was no constructor placed in the entiy, when one creates the instance the default system cunstructor will be used
+                        //  since there was no constructor placed in the
+                        //  entity, when one creaes the instance the
+                        //  default system construtor will be used
                         Product item = new Product();
-                        //what about ProductID
-                        //  Since ProductID is an identity field it does not need to be loaded into the new instnace
+                        //what about ProductID??
+                        //   since ProductID is an identity field it does NOT
+                        //   need to be loaded into the new instance
                         item.ProductName = ProductName.Text.Trim();
-                        if(CategoryList.SelectedIndex == 0)
+                        if (CategoryList.SelectedIndex == 0)
                         {
                             item.CategoryID = null;
                         }
                         else
                         {
-                            item.CategoryID = int.Parse(SupplierList.SelectedValue);
+                            item.CategoryID = int.Parse(CategoryList.SelectedValue);
                         }
-
                         if (SupplierList.SelectedIndex == 0)
                         {
                             item.SupplierID = null;
@@ -274,7 +277,7 @@ namespace WebApp.NorthwindPages
                         }
                         item.QuantityPerUnit =
                             string.IsNullOrEmpty(QuantityPerUnit.Text) ? null : QuantityPerUnit.Text;
-                        if (string.IsNullOrEmpty(UnitPrice.Text))
+                        if(string.IsNullOrEmpty(UnitPrice.Text))
                         {
                             item.UnitPrice = null;
                         }
@@ -282,7 +285,6 @@ namespace WebApp.NorthwindPages
                         {
                             item.UnitPrice = decimal.Parse(UnitPrice.Text);
                         }
-
                         if (string.IsNullOrEmpty(UnitsInStock.Text))
                         {
                             item.UnitsInStock = null;
@@ -291,7 +293,6 @@ namespace WebApp.NorthwindPages
                         {
                             item.UnitsInStock = Int16.Parse(UnitsInStock.Text);
                         }
-
                         if (string.IsNullOrEmpty(UnitsOnOrder.Text))
                         {
                             item.UnitsOnOrder = null;
@@ -300,7 +301,6 @@ namespace WebApp.NorthwindPages
                         {
                             item.UnitsOnOrder = Int16.Parse(UnitsOnOrder.Text);
                         }
-
                         if (string.IsNullOrEmpty(ReorderLevel.Text))
                         {
                             item.ReorderLevel = null;
@@ -309,20 +309,46 @@ namespace WebApp.NorthwindPages
                         {
                             item.ReorderLevel = Int16.Parse(ReorderLevel.Text);
                         }
-                        //what about discontinued??
+                        //what about Discontinued??
                         item.Discontinued = false;
-                        //issue BLL call
+                        //issue the BLL call
                         int newProductID = sysmgr.Products_Add(item);
-                        //Give feedback
-                        //if you get to execute the feedback code, it means that the product has been successfully added to the database
+                        //give feedback
+                        //if you get to execute the feedback code, it means
+                        //    that the product has been successfully added to
+                        //    the database
                         ProductID.Text = newProductID.ToString();
                         errormsgs.Add("Product has been added");
                         LoadMessageDisplay(errormsgs, "alert alert-success");
                         //is there any other controls on the form that need to be refreshed
-                        BindProductList(); //by default this will be at index 0
+                        BindProductList(); //by default, list will be at index 0
                         ProductList.SelectedValue = ProductID.Text;
                     }
-                    catch(Exception ex)
+                    catch (DbUpdateException ex)
+                    {
+                        UpdateException updateException = (UpdateException)ex.InnerException;
+                        if (updateException.InnerException != null)
+                        {
+                            errormsgs.Add(updateException.InnerException.Message.ToString());
+                        }
+                        else
+                        {
+                            errormsgs.Add(updateException.Message);
+                        }
+                        LoadMessageDisplay(errormsgs, "alert alert-danger");
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                        foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                        {
+                            foreach (var validationError in entityValidationErrors.ValidationErrors)
+                            {
+                                errormsgs.Add(validationError.ErrorMessage);
+                            }
+                        }
+                        LoadMessageDisplay(errormsgs, "alert alert-danger");
+                    }
+                    catch (Exception ex)
                     {
                         errormsgs.Add(GetInnerException(ex).ToString());
                         LoadMessageDisplay(errormsgs, "alert alert-danger");
@@ -336,31 +362,32 @@ namespace WebApp.NorthwindPages
             //ensure validation is still good
             if (Page.IsValid)
             {
-                //event code validation that was not accoplished on the web form
+                //event code validation that was not accomplished on
+                //   the web form
                 //examples
-                //assume that the category id is required
+                //Assume that the CategoryID is required
                 if (CategoryList.SelectedIndex == 0)
                 {
                     errormsgs.Add("Category is required");
                 }
                 if (QuantityPerUnit.Text.Length > 20)
                 {
-                    errormsgs.Add("Quantity per unit is limited to 20 charecter");
+                    errormsgs.Add("Quantity per Unit is limited to 20 characters");
                 }
 
-                //ON UPDATE, ensure you have you primary key value
+                //on updae, ensure you have your primary key value
                 int productid = 0;
                 if (string.IsNullOrEmpty(ProductID.Text))
                 {
                     errormsgs.Add("Search for a product to update");
                 }
-                else if (!int.TryParse(ProductID.Text,out productid))
+                else if (!int.TryParse(ProductID.Text, out productid))
                 {
-                    errormsgs.Add("Product ID is invalid");
+                    errormsgs.Add("Product id is invalid");
                 }
                 else if (productid < 1)
                 {
-                    errormsgs.Add("Product ID is invalid");
+                    errormsgs.Add("Product id is invalid");
                 }
 
                 //check if click event validation is good
@@ -370,16 +397,18 @@ namespace WebApp.NorthwindPages
                 }
                 else
                 {
-                    //assume that the data is valid to our knowledge
+                    //assume taht the data is validate to our knowledge
                     try
                     {
                         //standard update to a database
                         //connect to the appropriate controller
                         ProductController sysmgr = new ProductController();
                         //create and load an instance of the entity record
-                        //  since there was no constructor placed in the entiy, when one creates the instance the default system cunstructor will be used
+                        //  since there was no constructor placed in the
+                        //  entity, when one creaes the instance the
+                        //  default system construtor will be used
                         Product item = new Product();
-                        //ensure you include the primary key
+                        //ensure yo include the primary key
                         item.ProductID = productid;
                         item.ProductName = ProductName.Text.Trim();
                         if (CategoryList.SelectedIndex == 0)
@@ -388,9 +417,8 @@ namespace WebApp.NorthwindPages
                         }
                         else
                         {
-                            item.CategoryID = int.Parse(SupplierList.SelectedValue);
+                            item.CategoryID = int.Parse(CategoryList.SelectedValue);
                         }
-
                         if (SupplierList.SelectedIndex == 0)
                         {
                             item.SupplierID = null;
@@ -409,7 +437,6 @@ namespace WebApp.NorthwindPages
                         {
                             item.UnitPrice = decimal.Parse(UnitPrice.Text);
                         }
-
                         if (string.IsNullOrEmpty(UnitsInStock.Text))
                         {
                             item.UnitsInStock = null;
@@ -418,7 +445,6 @@ namespace WebApp.NorthwindPages
                         {
                             item.UnitsInStock = Int16.Parse(UnitsInStock.Text);
                         }
-
                         if (string.IsNullOrEmpty(UnitsOnOrder.Text))
                         {
                             item.UnitsOnOrder = null;
@@ -427,7 +453,6 @@ namespace WebApp.NorthwindPages
                         {
                             item.UnitsOnOrder = Int16.Parse(UnitsOnOrder.Text);
                         }
-
                         if (string.IsNullOrEmpty(ReorderLevel.Text))
                         {
                             item.ReorderLevel = null;
@@ -436,29 +461,54 @@ namespace WebApp.NorthwindPages
                         {
                             item.ReorderLevel = Int16.Parse(ReorderLevel.Text);
                         }
-                        //acctual current value of discontinued is needed
+                        //actually current valud of discontinued is needed
                         item.Discontinued = Discontinued.Checked;
-                        //issue BLL call
+                        //issue the BLL call
                         int rowsaffected = sysmgr.Products_Update(item);
-                        //Give feedback
-                        //if you get to execute the feedback code, it means that the product has been successfully added to the database
-                        if(rowsaffected > 0)
+                        //give feedback
+                        if (rowsaffected > 0)
                         {
+                           
                             errormsgs.Add("Product has been updated");
                             LoadMessageDisplay(errormsgs, "alert alert-success");
                             //is there any other controls on the form that need to be refreshed
-                            BindProductList(); //by default this will be at index 0
+                            BindProductList(); //by default, list will be at index 0
                             ProductList.SelectedValue = ProductID.Text;
                         }
                         else
                         {
-                            errormsgs.Add("Product has not been updated");
-                            LoadMessageDisplay(errormsgs, "alert alert-warning");
+                            errormsgs.Add("Product has not been updated. Product was not found");
+                            LoadMessageDisplay(errormsgs, "alert alert-info");
                             //is there any other controls on the form that need to be refreshed
-                            BindProductList(); //by default this will be at index 0
-
-                            //optionally you could clear your feilds
+                            BindProductList(); //by default, list will be at index 0
+                            
+                            //optionally you could clear your fields
                         }
+                       
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        UpdateException updateException = (UpdateException)ex.InnerException;
+                        if (updateException.InnerException != null)
+                        {
+                            errormsgs.Add(updateException.InnerException.Message.ToString());
+                        }
+                        else
+                        {
+                            errormsgs.Add(updateException.Message);
+                        }
+                        LoadMessageDisplay(errormsgs, "alert alert-danger");
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                        foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                        {
+                            foreach (var validationError in entityValidationErrors.ValidationErrors)
+                            {
+                                errormsgs.Add(validationError.ErrorMessage);
+                            }
+                        }
+                        LoadMessageDisplay(errormsgs, "alert alert-danger");
                     }
                     catch (Exception ex)
                     {
@@ -471,7 +521,14 @@ namespace WebApp.NorthwindPages
 
         protected void RemoveProduct_Click(object sender, EventArgs e)
         {
-                //ON DELETE, ensure you have you primary key value
+           
+                //event code validation that was not accomplished on
+                //   the web form
+                //examples
+                //Assume that the CategoryID is required
+               
+
+                //on delete, ensure you have your primary key value
                 int productid = 0;
                 if (string.IsNullOrEmpty(ProductID.Text))
                 {
@@ -479,11 +536,11 @@ namespace WebApp.NorthwindPages
                 }
                 else if (!int.TryParse(ProductID.Text, out productid))
                 {
-                    errormsgs.Add("Product ID is invalid");
+                    errormsgs.Add("Product id is invalid");
                 }
                 else if (productid < 1)
                 {
-                    errormsgs.Add("Product ID is invalid");
+                    errormsgs.Add("Product id is invalid");
                 }
 
                 //check if click event validation is good
@@ -493,35 +550,60 @@ namespace WebApp.NorthwindPages
                 }
                 else
                 {
-                    //assume that the data is valid to our knowledge
+                    //assume taht the data is validate to our knowledge
                     try
                     {
                         //standard delete to a database
                         //connect to the appropriate controller
                         ProductController sysmgr = new ProductController();
-                        
-                        //issue BLL call
+                      
+                        //issue the BLL call
                         int rowsaffected = sysmgr.Products_Delete(productid);
-                        //Give feedback
-                        //if you get to execute the feedback code, it means that the product has been successfully added to the database
+                        //give feedback
                         if (rowsaffected > 0)
                         {
+
                             errormsgs.Add("Product has been discontinued");
                             LoadMessageDisplay(errormsgs, "alert alert-success");
                             //is there any other controls on the form that need to be refreshed
-                            BindProductList(); //by default this will be at index 0
+                            BindProductList(); //by default, list will be at index 0
                             ProductList.SelectedValue = ProductID.Text;  //logical delete
-                            Discontinued.Checked = true; //Logical delete
+                            Discontinued.Checked = true; //logical delete
                         }
                         else
                         {
-                            errormsgs.Add("Product has not been discontinued");
+                            errormsgs.Add("Product has not been discontinued. Product was not found");
                             LoadMessageDisplay(errormsgs, "alert alert-warning");
                             //is there any other controls on the form that need to be refreshed
-                            BindProductList(); //by default this will be at index 0
+                            BindProductList(); //by default, list will be at index 0
 
-                            //optionally you could clear your feilds
+                            //optionally you could clear your fields
                         }
+
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        UpdateException updateException = (UpdateException)ex.InnerException;
+                        if (updateException.InnerException != null)
+                        {
+                            errormsgs.Add(updateException.InnerException.Message.ToString());
+                        }
+                        else
+                        {
+                            errormsgs.Add(updateException.Message);
+                        }
+                        LoadMessageDisplay(errormsgs, "alert alert-danger");
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                        foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                        {
+                            foreach (var validationError in entityValidationErrors.ValidationErrors)
+                            {
+                                errormsgs.Add(validationError.ErrorMessage);
+                            }
+                        }
+                        LoadMessageDisplay(errormsgs, "alert alert-danger");
                     }
                     catch (Exception ex)
                     {
@@ -529,6 +611,7 @@ namespace WebApp.NorthwindPages
                         LoadMessageDisplay(errormsgs, "alert alert-danger");
                     }
                 }
-            }
+
+        }
     }
 }
