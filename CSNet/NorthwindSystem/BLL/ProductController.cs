@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +8,7 @@ using System.Threading.Tasks;
 using NorthwindSystem.DAL;
 using NorthwindSystem.Data;
 using System.ComponentModel;
+using System.Data.SqlClient;
 #endregion
 
 namespace NorthwindSystem.BLL
