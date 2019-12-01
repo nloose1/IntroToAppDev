@@ -570,8 +570,8 @@ namespace WebApp.NorthwindPages
                             LoadMessageDisplay(errormsgs, "alert alert-success");
                             //is there any other controls on the form that need to be refreshed
                             BindProductList(); //by default, list will be at index 0
-                            ProductList.SelectedValue = ProductID.Text;  //logical delete
-                            Discontinued.Checked = true; //logical delete
+                            ProductList.SelectedValue = ProductID.Text;  //logical delete only
+                            Discontinued.Checked = true; //logical delete only
                         }
                         else
                         {
